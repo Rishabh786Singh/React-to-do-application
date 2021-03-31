@@ -1,6 +1,7 @@
 import './App.css';
 import { useState} from 'react';
 import { Button , FormControl, Input, InputLabel} from '@material-ui/core';
+import Todo from './Todo';
 
 function App() {
   const [todos , setTodos] = useState(["Finish this Project", "Start another project"]);
@@ -20,8 +21,8 @@ function App() {
       <Button  disabled={!response} type="submit" onClick={addResponse} variant="contained" color="primary">Add to-do
         </Button>
       <ul>
-        {todos.map(todo =>{
-          return <li>{todo}</li>
+        {todos.map((element, Index )=>{
+          return <Todo count={Index} todo ={element}/>
         })}
       </ul>
     </div>
