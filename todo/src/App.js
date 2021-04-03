@@ -1,15 +1,25 @@
 import './App.css';
-import { useState} from 'react';
+import { useState, useEffect} from 'react';
 import { Button , FormControl, Input, InputLabel} from '@material-ui/core';
 import Todo from './Todo';
+import db from './firebase';
+import firebase from 'firebase';
 
 function App() {
-  const [todos , setTodos] = useState(["Finish this Project", "Start another project"]);
+  const [todos , setTodos] = useState([]);
   const [response, setResponse] = useState('');
+  useEffect(() => {
+    db.collection('todos').orderBy('timestamp', 'desc').onSnapshot(snapshot=>{
+      console.log(snapshot.docs.map(doc=>doc.data().todo));
+      setTodos(snapshot.docs.map(doc=> doc.data().todo));
+    })
+  }, [])
   const addResponse = (event) =>{
     event.preventDefault();
-    setTodos([...todos, response]);
-    setResponse('');
+    db.collection('todos').add({
+      todo: response,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    })
   };
   return (
     <div className="App">
